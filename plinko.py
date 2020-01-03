@@ -1,8 +1,5 @@
 import numpy as np
-import pandas as pd
 import matplotlib.pyplot as plt
-from plotly.subplots import make_subplots
-import plotly.graph_objects as go
 import random
 
 plt.style.use("seaborn-whitegrid")
@@ -109,9 +106,10 @@ class PlinkoPuck:
         Returns:
             tuple: The x,y coordinate of which money slot the puck dropped.
         """
-        slot = np.where(self.BOARD == self.get_letter())
+        BOARD1 = get_board()
+        slot = np.where(BOARD1 == self.get_letter())
         i, x, y = 1, slot[0] + 1, slot[1]
-        self.BOARD[x, y] = self.mark
+        BOARD1[x, y] = self.mark
         for turn in range(12):
             if random.randint(0, 1) == 0:
                 x += 1
@@ -120,10 +118,10 @@ class PlinkoPuck:
                 x += 1
                 y += 1
             y = self.__check_boundary(y)
-            self.BOARD[x, y] = self.mark
+            BOARD1[x, y] = self.mark
             if x == 13:
                 if show:
-                    print(self.BOARD)
+                    print(BOARD1)
                 return x, y
         return -1
 
@@ -176,6 +174,8 @@ def show_all_bars(number_of_pucks):
 
 def main():
     print("View the Jupyer Notebook to learn more about the simulation and the statistics of Plinko.")
+    plinko = PlinkoPuck()
+    plinko.run_simulation(True)
 
 if __name__ == "__main__":
     main()
