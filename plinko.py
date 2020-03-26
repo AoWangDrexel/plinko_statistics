@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 import random
-
+from blessings import Terminal
 plt.style.use("seaborn-whitegrid")
 
 
@@ -19,11 +19,7 @@ Well you are in luck!
 def get_board():
     """Creates the Plinko board.
     
-    Args:
-        None
-    
-    Returns:
-        numpy.ndarray: The Plinko board.
+    :returns numpy.ndarray: The Plinko board.
     """
     SLOTS = [chr(65 + i) for i in range(9)]
     MONEY = [letter.lower() for letter in SLOTS.copy()]
@@ -55,25 +51,19 @@ class PlinkoPuck:
         ====
         The default initialization is dropped at E and marked with P.
         
-        Args:
-            letter (str): A letter that shows where the puck dropped.
-            mark (str): A mark signfying the path the puck followed.
+        :param letter (str): A letter that shows where the puck dropped.
+        :param mark (str): A mark signfying the path the puck followed.
         """
         self.letter = letter
         self.mark = mark
-        if self.letter == None:
-            self.letter = "E"
-        if self.mark == None:
-            self.mark = "P"
+        self.letter = "E" if self.letter == None else letter
+        self.mark = "P" if self.mark == None else mark
 
     def __check_boundary(self, y):
         """Checks the left-most and right-most boundaries.
         
-        Args:
-            y (int): A y-coordinate.
-        
-        Returns:
-            int: A y-coordinate that does not go through the boundaries.
+        :param y (int): A y-coordinate.
+        :return int: A y-coordinate that does not go through the boundaries.
         """
         if y < 0:
             y = 1
@@ -85,7 +75,7 @@ class PlinkoPuck:
         self.letter = letter
     
     def get_letter(self):
-        """str: A letter slot.
+        """:return str: A letter slot.
         """
         return self.letter
     
@@ -93,18 +83,15 @@ class PlinkoPuck:
         self.mark = mark
     
     def get_mark(self):
-        """str: A mark to show the path of the puck.
+        """:return str: A mark to show the path of the puck.
         """
         return self.mark
 
     def run_simulation(self, show=False):
         """Runs the simulation of the Plinko game.
         
-        Args:
-            show (bool): If true the method will display the path of the puck.
-        
-        Returns:
-            tuple: The x,y coordinate of which money slot the puck dropped.
+        :param show (bool): If true the method will display the path of the puck.
+        :return tuple: The x,y coordinate of which money slot the puck dropped.
         """
         BOARD1 = get_board()
         slot = np.where(BOARD1 == self.get_letter())
@@ -130,12 +117,8 @@ def show_bar(letter, number_of_pucks):
     """Creates a bar graph of the chosen letter slot and counting the number of pucks
        in each money slot.
     
-    Args:
-        letter (str): The letter slot.
-        number_of_pucks (int): The number of trials.
-    
-    Returns:
-        None
+    :param letter (str): The letter slot.
+    :param number_of_pucks (int): The number of trials.
     """
     plinko = PlinkoPuck(letter)
     money_dict = {chr(ord("a") + i): 0 for i in range(9)}
@@ -150,11 +133,7 @@ def show_all_bars(number_of_pucks):
     """Creates bar graphs of all the letter slots and counting the number of pucks
        in each money slot.
     
-    Args:
-        number_of_pucks (int): The number of trials.
-    
-    Returns:
-        None
+    :param number_of_pucks (int): The number of trials.
     """
     plinkos = [PlinkoPuck(chr(65 + i)) for i in range(9)]
     fig, axs = plt.subplots(3, 3, figsize=(25,15))
@@ -172,10 +151,8 @@ def show_all_bars(number_of_pucks):
     plt.show()
 
 
-def main():
-    print("View the Jupyer Notebook to learn more about the simulation and the statistics of Plinko.")
+if __name__ == "__main__":
+    t = Terminal()
+    print(t.blue("View the Jupyer Notebook to learn more about the simulation and the statistics of Plinko."))
     plinko = PlinkoPuck()
     plinko.run_simulation(True)
-
-if __name__ == "__main__":
-    main()
